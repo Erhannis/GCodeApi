@@ -136,6 +136,42 @@ public class GCode {
         return c;
     }
     
+    private Raw<Raw> oneOff(String cmd) {
+        Raw<Raw> c = new Raw<Raw>(cmd);
+        commands.add(c);
+        return c;
+    }
+    
+    /** Set E to absolute positioning. */
+    public Raw<Raw> eAbsolute() {
+        return oneOff("M82");
+    }
+
+    /** Set E to relative positioning. */
+    public Raw<Raw> eRelative() {
+        return oneOff("M83");
+    }
+
+    /** Set the interpreter to absolute positions */
+    public Raw<Raw> absolute() {
+        return oneOff("G90");
+    }
+
+    /** Set the interpreter to relative positions */
+    public Raw<Raw> relative() {
+        return oneOff("G91");
+    }
+    
+    /** Set Units to Inches */
+    public Raw<Raw> inches() {
+        return oneOff("G20");
+    }
+
+    /** Set Units to Millimeters */
+    public Raw<Raw> millimeters() {
+        return oneOff("G21");
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
