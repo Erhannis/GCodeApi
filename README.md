@@ -11,6 +11,8 @@ gc.extrude().x(100).e(100);
 System.out.println(gc.toString());
 ```
 
+Marlin flavor GCode.
+
 Released under the Apache License 2.0 .
 
 -Erhannis
