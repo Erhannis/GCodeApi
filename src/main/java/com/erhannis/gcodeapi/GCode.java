@@ -14,24 +14,10 @@ import java.util.List;
  * @author Erhannis
  */
 public class GCode {
-    public static abstract class Command<THIS extends Command> {
-//        public GCode owner;
+    public static abstract class Command<THIS extends Command<THIS>> {
         public abstract List<String> toGCode();
-        
-//        public void owner(GCode owner) {
-//            this.owner = owner;
-//        }
-//        
-//        /** Short alias for `commit()`. */
-//        public void q() {
-//            commit();
-//        }
-//        
-//        public void commit() {
-//            owner
-//        }
     }
-    public static class Raw<THIS extends Raw> extends Command<THIS> {
+    public static class Raw extends Command<Raw> {
         public String command;
         
         public Raw(String cmd) {
@@ -43,7 +29,7 @@ public class GCode {
             return Arrays.asList(command);
         }
     }
-    public static abstract class LinearMove<THIS extends LinearMove> extends Command<THIS> {
+    public static abstract class LinearMove<THIS extends LinearMove<THIS>> extends Command<THIS> {
         public Double x;
         public Double y;
         public Double z;
@@ -86,18 +72,18 @@ public class GCode {
             return command;
         }
     }
-    public static class G0<THIS extends G0> extends LinearMove<THIS> {
+    public static class G0 extends LinearMove<G0> {
         @Override
         public List<String> toGCode() {
             return Arrays.asList(super.addParams("G0"));
         }
     }
-    public static class G1<THIS extends G1> extends LinearMove<THIS> {
+    public static class G1 extends LinearMove<G1> {
         public Double e;
 
-        public THIS e(double v) {
+        public G1 e(double v) {
             this.e = v;
-            return (THIS) this;
+            return this;
         }
         
         @Override
@@ -112,63 +98,63 @@ public class GCode {
     
     public ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
     
-    public G0<G0> move() {
-        G0<G0> cmd = new G0<G0>();
+    public G0 move() {
+        G0 cmd = new G0();
         commands.add(cmd);
         return cmd;
     }
 
-    public G1<G1> extrude() {
-        G1<G1> cmd = new G1<G1>();
+    public G1 extrude() {
+        G1 cmd = new G1();
         commands.add(cmd);
         return cmd;
     }
     
-    public Raw<Raw> raw(String cmd) {
-        Raw<Raw> c = new Raw<Raw>(cmd);
+    public Raw raw(String cmd) {
+        Raw c = new Raw(cmd);
         commands.add(c);
         return c;
     }
 
-    public Raw<Raw> comment(String comment) {
-        Raw<Raw> c = new Raw<Raw>(";"+comment);
+    public Raw comment(String comment) {
+        Raw c = new Raw(";"+comment);
         commands.add(c);
         return c;
     }
     
-    private Raw<Raw> oneOff(String cmd) {
-        Raw<Raw> c = new Raw<Raw>(cmd);
+    private Raw oneOff(String cmd) {
+        Raw c = new Raw(cmd);
         commands.add(c);
         return c;
     }
     
     /** Set E to absolute positioning. */
-    public Raw<Raw> eAbsolute() {
+    public Raw eAbsolute() {
         return oneOff("M82");
     }
 
     /** Set E to relative positioning. */
-    public Raw<Raw> eRelative() {
+    public Raw eRelative() {
         return oneOff("M83");
     }
 
     /** Set the interpreter to absolute positions */
-    public Raw<Raw> absolute() {
+    public Raw absolute() {
         return oneOff("G90");
     }
 
     /** Set the interpreter to relative positions */
-    public Raw<Raw> relative() {
+    public Raw relative() {
         return oneOff("G91");
     }
     
     /** Set Units to Inches */
-    public Raw<Raw> inches() {
+    public Raw inches() {
         return oneOff("G20");
     }
 
     /** Set Units to Millimeters */
-    public Raw<Raw> millimeters() {
+    public Raw millimeters() {
         return oneOff("G21");
     }
     

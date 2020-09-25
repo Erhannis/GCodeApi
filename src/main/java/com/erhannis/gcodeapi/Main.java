@@ -12,11 +12,13 @@ package com.erhannis.gcodeapi;
 public class Main {
     public static void main(String[] args) {
         GCode gc = new GCode();
-        gc.comment("this is a test");
-        gc.millimeters();
+        
         gc.absolute();
-        gc.move().x(0).y(0).z(0).f(800);
-        gc.extrude().x(100).e(100);
+        gc.millimeters();
+        gc.move().f(800);
+        gc.move().z(5);
+        gc.move().x(100).y(100);
+        
         System.out.println(gc.toString());
     }
 }
