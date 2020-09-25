@@ -95,6 +95,51 @@ public class GCode {
             return Arrays.asList(super.addParams(command));
         }
     }
+    public static class Set extends Command<Set> {
+        public Double e;
+        public Double x;
+        public Double y;
+        public Double z;
+        
+        public Set e(double v) {
+            this.e = v;
+            return this;
+        }
+
+        public Set x(double v) {
+            this.x = v;
+            return this;
+        }
+
+        public Set y(double v) {
+            this.y = v;
+            return this;
+        }
+
+        public Set z(double v) {
+            this.z = v;
+            return this;
+        }
+        
+        @Override
+        public List<String> toGCode() {
+            String command = "G92";
+            if (e != null) {
+                command += " E"+e;
+            }
+            if (x != null) {
+                command += " X"+x;
+            }
+            if (y != null) {
+                command += " Y"+y;
+            }
+            if (z != null) {
+                command += " Z"+z;
+            }
+            return Arrays.asList(command);
+        }
+    }
+    
     
     public ArrayList<Command<?>> commands = new ArrayList<Command<?>>();
     
@@ -106,6 +151,13 @@ public class GCode {
 
     public G1 extrude() {
         G1 cmd = new G1();
+        commands.add(cmd);
+        return cmd;
+    }
+
+    /** Set the current position to the values specified. */
+    public Set set() {
+        Set cmd = new Set();
         commands.add(cmd);
         return cmd;
     }
@@ -156,6 +208,11 @@ public class GCode {
     /** Set Units to Millimeters */
     public Raw millimeters() {
         return oneOff("G21");
+    }
+
+    /** Display `prompt` and wait for the user to continue. */
+    public Raw prompt(String prompt) {
+        return oneOff("M0 " + prompt);
     }
     
     @Override
