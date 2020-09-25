@@ -89,7 +89,7 @@ public class GCode {
     public static class G0<THIS extends G0> extends LinearMove<THIS> {
         @Override
         public List<String> toGCode() {
-            return Arrays.asList(super.addParams("G0 "));
+            return Arrays.asList(super.addParams("G0"));
         }
     }
     public static class G1<THIS extends G1> extends LinearMove<THIS> {
@@ -102,7 +102,7 @@ public class GCode {
         
         @Override
         public List<String> toGCode() {
-            String command = "G1 ";
+            String command = "G1";
             if (e != null) {
                 command += " E"+e;
             }
